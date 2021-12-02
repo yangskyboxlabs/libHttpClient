@@ -43,6 +43,7 @@ WinHttpConnection::WinHttpConnection(
 
 WinHttpConnection::~WinHttpConnection()
 {
+    // TODO: isn't called
     HC_TRACE_VERBOSE(HTTPCLIENT, "WinHttpConnection dtor");
 
     if (m_state == ConnectionState::WebSocketConnected && m_hRequest && m_winHttpWebSocketExports.close)

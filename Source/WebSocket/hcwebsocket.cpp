@@ -137,6 +137,7 @@ HRESULT HC_WEBSOCKET::Connect(
             );
 
             HRESULT hr = connectFunc(uri, subProtocol, this, &m_connectAsyncBlock, info.context, httpSingleton->m_performEnv.get());
+            // this->impl now contains std::shared_ptr<hc_websocket_impl> that's been init'd with WinHttpConnection::Initialize
 
             if (SUCCEEDED(hr))
             {
@@ -145,7 +146,7 @@ HRESULT HC_WEBSOCKET::Connect(
                     m_state = State::Connecting;
                 }
                 // Add a ref for the provider. This guarantees the HC_WEBSOCKET is alive until disconnect.
-                AddRef();
+                //AddRef();
             }
             return hr;
         }

@@ -320,12 +320,13 @@ Result<XPlatSecurityInformation> WinHttpProvider::GetSecurityInformation(const c
     assert(securityInformationBufferByteCount > 0);
 
     XPlatSecurityInformation securityInfo;
-    securityInfo.buffer.resize(securityInformationBufferByteCount);
+    //securityInfo.buffer.resize(securityInformationBufferByteCount);
+    securityInfo.buffer = new uint8_t[securityInformationBufferByteCount];
     RETURN_IF_FAILED(XNetworkingQuerySecurityInformationForUrlAsyncResult(
         &asyncBlock,
-        securityInfo.buffer.size(),
+        securityInformationBufferByteCount, //securityInfo.buffer.size(),
         nullptr,
-        securityInfo.buffer.data(),
+        securityInfo.buffer, //securityInfo.buffer.data(),
         &securityInfo.securityInformation));
 
     // Duplicate security protocol flags for convenience
