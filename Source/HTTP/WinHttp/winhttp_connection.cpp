@@ -43,7 +43,7 @@ WinHttpConnection::WinHttpConnection(
 
 WinHttpConnection::~WinHttpConnection()
 {
-    // TODO: isn't called
+    // TODO: jasonsa
     HC_TRACE_VERBOSE(HTTPCLIENT, "WinHttpConnection dtor");
 
     if (m_state == ConnectionState::WebSocketConnected && m_hRequest && m_winHttpWebSocketExports.close)
@@ -1100,7 +1100,7 @@ void CALLBACK WinHttpConnection::completion_callback(
                     pRequestContext->m_connectionClosedCallback();
                 }
 
-                // TODO: jasonsa -- this isn't called
+                // TODO: jasonsa
                 // WinHttp Shutdown complete. WinHttp guarantees we will get no more callbacks for this request so we can safely cleanup context
                 HC_UNIQUE_PTR<WinHttpCallbackContext> reclaim{ callbackContext };
                 break;
@@ -1551,7 +1551,7 @@ HRESULT CALLBACK WinHttpConnection::WebSocketSendProvider(XAsyncOp op, const XAs
     }
     case XAsyncOp::Cleanup:
     {
-        // TODO: jasonsa -- this isn't called
+        // TODO: jasonsa
         HC_UNIQUE_PTR<WebSocketSendContext> reclaim{ context };
         return S_OK;
     }
