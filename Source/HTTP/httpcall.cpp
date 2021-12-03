@@ -36,9 +36,7 @@ try
     if (nullptr == httpSingleton)
         return E_HC_NOT_INITIALISED;
 
-    // TODO: jasonsa fix
-    //HC_CALL* call = Make<HC_CALL>();
-    HC_CALL* call = new HC_CALL();
+    HC_CALL* call = Make<HC_CALL>();
     if (call == nullptr)
     {
         return E_OUTOFMEMORY;
@@ -90,9 +88,7 @@ try
     if (refCount <= 0)
     {
         ASSERT(refCount == 0); // should only fire at 0
-        // TODO: jasonsa fix
-        //Delete(call);
-        delete call;
+        Delete(call);
     }
 
     return S_OK;
