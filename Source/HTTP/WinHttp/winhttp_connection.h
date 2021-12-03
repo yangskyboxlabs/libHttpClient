@@ -152,8 +152,8 @@ struct XPlatSecurityInformation
     XPlatSecurityInformation& operator=(XPlatSecurityInformation&&) = default;
 
 #if HC_PLATFORM == HC_PLATFORM_GDK
-    //http_internal_vector<uint8_t> buffer;
-    uint8_t* buffer;
+    http_internal_vector<uint8_t> buffer;
+    //uint8_t* buffer;
     XNetworkingSecurityInformation* securityInformation{ nullptr };
 #endif
     uint32_t enabledHttpSecurityProtocolFlags;

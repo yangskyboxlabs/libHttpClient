@@ -11,7 +11,10 @@ HC_DECLARE_TRACE_AREA(WEBSOCKET);
 struct hc_websocket_impl 
 {
     hc_websocket_impl() {}
-    virtual ~hc_websocket_impl() {}
+    virtual ~hc_websocket_impl() 
+    {
+        HC_TRACE_VERBOSE(WEBSOCKET, "hc_websocket_impl dtor");
+    }
 };
 
 #if !HC_NOWEBSOCKETS

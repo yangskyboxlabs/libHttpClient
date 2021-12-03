@@ -331,6 +331,7 @@ HRESULT WinHttpConnection::WebSocketConnectAsync(XAsyncBlock* async)
     m_asyncBlock = async;
 
     // Unlike HTTP, WebSocket providers need to implement the XAsyncProvider for each operation
+
     RETURN_IF_FAILED(XAsyncBegin(async, this, HCWebSocketConnectAsync, "HCWebSocketConnectAsync", WinHttpConnection::WebSocketConnectProvider));
 
     return S_OK;
@@ -1099,6 +1100,7 @@ void CALLBACK WinHttpConnection::completion_callback(
                     pRequestContext->m_connectionClosedCallback();
                 }
 
+                // TODO: jasonsa -- this isn't called
                 // WinHttp Shutdown complete. WinHttp guarantees we will get no more callbacks for this request so we can safely cleanup context
                 HC_UNIQUE_PTR<WinHttpCallbackContext> reclaim{ callbackContext };
                 break;
@@ -1180,7 +1182,8 @@ HRESULT WinHttpConnection::SendRequest()
 #if HC_PLATFORM == HC_PLATFORM_GDK
         WINHTTP_CALLBACK_FLAG_SEND_REQUEST |
 #endif
-        WINHTTP_CALLBACK_FLAG_ALL_COMPLETIONS,
+        WINHTTP_CALLBACK_FLAG_ALL_COMPLETIONS | 
+        WINHTTP_CALLBACK_STATUS_HANDLE_CLOSING,
         0))
     {
         DWORD dwError = GetLastError();
@@ -1230,6 +1233,7 @@ HRESULT WinHttpConnection::StartWinHttpClose()
         HC_TRACE_ERROR(HTTPCLIENT, "WinHttpCloseHandle failed with errorCode=%d", dwError);
         return HRESULT_FROM_WIN32(dwError);
     }
+    //Sleep(2000);
 
     return S_OK;
 }
@@ -1547,6 +1551,7 @@ HRESULT CALLBACK WinHttpConnection::WebSocketSendProvider(XAsyncOp op, const XAs
     }
     case XAsyncOp::Cleanup:
     {
+        // TODO: jasonsa -- this isn't called
         HC_UNIQUE_PTR<WebSocketSendContext> reclaim{ context };
         return S_OK;
     }

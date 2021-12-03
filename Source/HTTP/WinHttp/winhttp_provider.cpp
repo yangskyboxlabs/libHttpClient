@@ -234,15 +234,20 @@ HRESULT WinHttpProvider::WebSocketConnectAsync(const char* uri, const char* /*su
 #endif
 
     // Initialize WinHttpConnection
-    auto initConnectionResult = WinHttpConnection::Initialize(getHSessionResult.ExtractPayload(), websocketHandle, m_proxyType, getSecurityInfoResult.ExtractPayload());
-    RETURN_IF_FAILED(initConnectionResult.hr);
+    {
+        auto initConnectionResult = WinHttpConnection::Initialize(getHSessionResult.ExtractPayload(), websocketHandle, m_proxyType, getSecurityInfoResult.ExtractPayload());
+        RETURN_IF_FAILED(initConnectionResult.hr);
 
-    auto connection = initConnectionResult.ExtractPayload();
-    // Store weak reference to connection so we can close it if it is still active on shutdown
-    m_connections.push_back(connection);
-    RETURN_IF_FAILED(connection->WebSocketConnectAsync(async));
-
-    websocketHandle->impl = std::move(connection);
+        auto connection = initConnectionResult.ExtractPayload();
+        // Store weak reference to connection so we can close it if it is still active on shutdown
+        m_connections.push_back(connection);
+        RETURN_IF_FAILED(connection->WebSocketConnectAsync(async));
+        
+        websocketHandle->impl = std::move(connection);
+        //connection = nullptr;
+    }
+    // TODO: jasonsa testing
+    //websocketHandle->impl = nullptr;
 
     return S_OK;
 }
@@ -320,13 +325,15 @@ Result<XPlatSecurityInformation> WinHttpProvider::GetSecurityInformation(const c
     assert(securityInformationBufferByteCount > 0);
 
     XPlatSecurityInformation securityInfo;
-    //securityInfo.buffer.resize(securityInformationBufferByteCount);
-    securityInfo.buffer = new uint8_t[securityInformationBufferByteCount];
+    securityInfo.buffer.resize(securityInformationBufferByteCount);
+    //securityInfo.buffer = new uint8_t[securityInformationBufferByteCount];
     RETURN_IF_FAILED(XNetworkingQuerySecurityInformationForUrlAsyncResult(
         &asyncBlock,
-        securityInformationBufferByteCount, //securityInfo.buffer.size(),
+        //securityInformationBufferByteCount, //securityInfo.buffer.size(),
+        securityInfo.buffer.size(),
         nullptr,
-        securityInfo.buffer, //securityInfo.buffer.data(),
+        //securityInfo.buffer, //securityInfo.buffer.data(),
+        securityInfo.buffer.data(),
         &securityInfo.securityInformation));
 
     // Duplicate security protocol flags for convenience

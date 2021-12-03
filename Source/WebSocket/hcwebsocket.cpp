@@ -27,6 +27,7 @@ HC_WEBSOCKET::HC_WEBSOCKET(
 HC_WEBSOCKET::~HC_WEBSOCKET()
 {
 #if !HC_NOWEBSOCKETS
+    this->impl = nullptr;
     HC_TRACE_VERBOSE(WEBSOCKET, "HCWebsocketHandle dtor");
 #endif
 }
@@ -145,6 +146,8 @@ HRESULT HC_WEBSOCKET::Connect(
                     std::lock_guard<std::recursive_mutex> lock{ m_mutex };
                     m_state = State::Connecting;
                 }
+
+                // TODO: jasonsa where cleanup?
                 // Add a ref for the provider. This guarantees the HC_WEBSOCKET is alive until disconnect.
                 //AddRef();
             }
