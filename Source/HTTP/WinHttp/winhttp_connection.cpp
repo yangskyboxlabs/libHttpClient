@@ -1175,7 +1175,7 @@ HRESULT WinHttpConnection::set_autodiscover_proxy()
     memset(&autoproxy_options, 0, sizeof(WINHTTP_AUTOPROXY_OPTIONS));
     memset(&info, 0, sizeof(WINHTTP_PROXY_INFO));
 
-    autoproxy_options.dwFlags = WINHTTP_AUTOPROXY_AUTO_DETECT;
+    autoproxy_options.dwFlags = WINHTTP_AUTOPROXY_AUTO_DETECT | WINHTTP_AUTOPROXY_ALLOW_AUTOCONFIG;
     autoproxy_options.dwAutoDetectFlags = WINHTTP_AUTO_DETECT_TYPE_DHCP | WINHTTP_AUTO_DETECT_TYPE_DNS_A;
     autoproxy_options.fAutoLogonIfChallenged = TRUE;
 

@@ -131,7 +131,7 @@ proxy_type get_ie_proxy_info(_In_ proxy_protocol protocol, _Inout_ xbox::httpcli
         return proxyType;
     }
 
-    if (config.fAutoDetect)
+    if (config.fAutoDetect || config.lpszAutoConfigUrl != nullptr)
     {
         proxyType = proxy_type::autodiscover_proxy;
     }
